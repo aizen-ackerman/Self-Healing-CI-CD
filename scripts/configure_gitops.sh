@@ -8,6 +8,13 @@ require_prereqs
 REPO_URL="${1:-${REPO_URL:-}}"
 IMAGE_REF="${2:-${IMAGE_REF:-}}"
 APP_VERSION="${3:-${APP_VERSION:-}}"
+TMP_MANIFEST="$(mktemp)"
+
+cleanup() {
+    rm -f "${TMP_MANIFEST}"
+}
+
+trap cleanup EXIT
 
 if [[ -z "${REPO_URL}" ]]; then
     echo "Usage: $0 <repo-url> [image-ref] [app-version]" >&2
@@ -15,7 +22,7 @@ if [[ -z "${REPO_URL}" ]]; then
     exit 1
 fi
 
-sed -i "s|REPO_URL_PLACEHOLDER|${REPO_URL}|g" "${ROOT_DIR}/argocd/application.yaml"
+sed "s|REPO_URL_PLACEHOLDER|${REPO_URL}|g" "${ROOT_DIR}/argocd/application.yaml" > "${TMP_MANIFEST}"
 
 if [[ -n "${IMAGE_REF}" ]]; then
     sed -i "s|^[[:space:]]*image:.*|          image: ${IMAGE_REF}|" "${ROOT_DIR}/k8s/deployment.yaml"
@@ -25,5 +32,5 @@ if [[ -n "${APP_VERSION}" ]]; then
     sed -i "s|value: \".*\"|value: \"${APP_VERSION}\"|" "${ROOT_DIR}/k8s/deployment.yaml"
 fi
 
-kubectl apply -f "${ROOT_DIR}/argocd/application.yaml"
+kubectl apply -f "${TMP_MANIFEST}"
 echo "Argo CD application manifest has been configured and applied."

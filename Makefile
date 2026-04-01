@@ -4,7 +4,7 @@ CLUSTER_NAME ?= gitops-demo
 APP_IMAGE ?= self-healing-app:v1
 BROKEN_IMAGE ?= self-healing-app:broken
 
-.PHONY: test bootstrap-local build load deploy install-argocd install-gitops status break heal
+.PHONY: test bootstrap-local build load deploy install-argocd install-gitops local-git status break heal
 
 test:
 	python3 -m unittest discover -s tests -v
@@ -25,6 +25,9 @@ install-argocd:
 
 install-gitops:
 	./scripts/configure_gitops.sh
+
+local-git:
+	./scripts/start_local_git_remote.sh
 
 bootstrap-local:
 	./scripts/bootstrap_local.sh

@@ -83,6 +83,13 @@ Bootstrap a local Kind cluster, build the app image, deploy Kubernetes resources
 make bootstrap-local
 ```
 
+Start a local Git remote for a fully local GitOps demo:
+
+```bash
+make local-git
+./scripts/configure_gitops.sh "$(./scripts/start_local_git_remote.sh)" self-healing-app:v1 1.0.0
+```
+
 Check status:
 
 ```bash
@@ -103,7 +110,7 @@ make heal
 
 ## GitOps Configuration
 
-Before Argo CD can sync from Git, configure the repository URL in [argocd/application.yaml](/home/azienackerman/Documents/Automated%20CICD%20PipeLine/self-healing-cicd-gitops/argocd/application.yaml):
+Before Argo CD can sync from Git, configure the repository URL in `argocd/application.yaml`:
 
 ```bash
 ./scripts/configure_gitops.sh https://github.com/YOUR_USER/self-healing-cicd-gitops.git docker.io/YOUR_USER/self-healing-app:latest 1.0.0
