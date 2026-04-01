@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: self-healing-app
-          image: self-healing-app:broken
+          image: self-healing-app:v1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000
