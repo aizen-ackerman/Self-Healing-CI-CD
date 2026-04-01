@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/GITHUB_USERNAME/self-healing-cicd-gitops.git
+    repoURL: REPO_URL_PLACEHOLDER
     targetRevision: main
     path: k8s
   destination:
